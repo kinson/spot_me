@@ -35,3 +35,6 @@ npm-debug.log
 
 # no db files please
 tmp/
+
+# no secrets please
+.env

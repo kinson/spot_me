@@ -74,3 +74,5 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :spot_me, SpotMe.Configs, redirect_uri: "http://localhost:4000/spotify/auth/callback"

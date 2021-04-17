@@ -17,6 +17,9 @@ defmodule SpotMeWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+    get "/spotify/auth", SpotifyAuthController, :authenticate_with_spotify
+    get "/spotify/auth/callback", SpotifyAuthController, :spotify_oauth_callback
   end
 
   # Other scopes may use custom stacks.

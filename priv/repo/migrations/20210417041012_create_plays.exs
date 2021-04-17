@@ -31,6 +31,9 @@ defmodule SpotMe.Repo.Migrations.CreatePlays do
       timestamps(type: :utc_datetime)
     end
 
+    create unique_index(:albums, :ext_spotify_id)
+    create unique_index(:songs, :ext_spotify_id)
+
     create table(:plays, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :played_at, :utc_datetime
