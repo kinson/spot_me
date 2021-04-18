@@ -21,6 +21,21 @@ defmodule SpotMe.Playback do
     Repo.all(Play)
   end
 
+  def most_recent_play() do
+    one_day_ago = DateTime.utc_now() |> DateTime.add(-1 * 24 * 60 * 60, :second)
+
+    case from(p in Play,
+           select: p.inserted_at,
+           order_by: [desc: p.inserted_at],
+           limit: 1
+         )
+         |> Repo.all() do
+      [] -> one_day_ago
+      results -> hd(results)
+    end
+    |> DateTime.to_unix()
+  end
+
   @doc """
   Gets a single play.
 
@@ -591,7 +606,8 @@ defmodule SpotMe.Playback do
       played_at = Map.get(play, :played_at)
 
       case create_play(%{played_at: played_at, song_id: song_id, spotify_user_id: user_id}) do
-        {:error, %Ecto.Changeset{errors: [played_at: _]}} -> nil
+        {:error, %Ecto.Changeset{errors: [played_at: _]}} ->
+          nil
 
         {:error, err} ->
           IO.puts("failed to create new play")

@@ -16,16 +16,17 @@ defmodule SpotMe.Services.RecentlyPlayed do
   defp parse_response({:error, err}), do: {:error, err}
 
   defp parse_response({:ok, response}) do
-    {:ok,
-     Map.get(response, :body)
-     |> Jason.decode!()
-     |> extract_response_data()}
+    body =
+      Map.get(response, :body)
+      |> Jason.decode!()
+
+    {:ok, extract_response_data(body), extract_next_cursor(body)}
   end
 
   def extract_response_data(body) do
     items = Map.get(body, "items")
 
-    IO.puts "Fetched #{Enum.count(items)} recently played tracks from Spotify"
+    IO.puts("Fetched #{Enum.count(items)} recently played tracks from Spotify")
 
     Enum.map(items, &get_play_data/1)
   end
@@ -51,4 +52,7 @@ defmodule SpotMe.Services.RecentlyPlayed do
       album: album
     }
   end
+
+  def extract_next_cursor(%{"cursors" => nil}), do: nil
+  def extract_next_cursor(%{"cursors" => %{"after" => after_ms}}), do: after_ms
 end

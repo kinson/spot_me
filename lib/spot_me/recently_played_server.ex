@@ -23,23 +23,35 @@ defmodule SpotMe.RecentlyPlayedServer do
 
   def fetch_recent_plays(%{after_ms: after_ms}) do
     # get users and access tokens
-    IO.puts "fetching recently played tracks after #{after_ms}"
+    IO.puts("fetching recently played tracks after #{after_ms}")
     users = SpotMe.Auth.get_users_and_live_tokens()
 
-    Enum.map(users, fn {user_id, access_token} ->
-      {:ok, plays} =
-        SpotMe.Services.RecentlyPlayed.get_recently_played_tracks(access_token, after_ms)
-
-      SpotMe.Playback.record_recent_playback(plays, user_id)
+    Enum.each(users, fn {user_id, access_token} ->
+      fetch_after(access_token, user_id, after_ms)
     end)
 
     %{after_ms: get_unix_time_ms()}
   end
 
   def fetch_recent_plays(_) do
-    twelve_hours_in_s = 12 * 60 * 60
-    unix_time = get_unix_time_ms(twelve_hours_in_s)
-    fetch_recent_plays(%{ after_ms: unix_time})
+    unix_time_ms = SpotMe.Playback.most_recent_play() |> seconds_to_ms()
+    fetch_recent_plays(%{after_ms: unix_time_ms})
+  end
+
+  def fetch_after(access_token, user_id, after_ms) do
+    {:ok, plays, next_cursor} =
+      SpotMe.Services.RecentlyPlayed.get_recently_played_tracks(access_token, after_ms)
+
+    SpotMe.Playback.record_recent_playback(plays, user_id)
+
+    case next_cursor do
+      nil ->
+        nil
+
+      next_cursor ->
+        IO.puts("Fetching next page of tracks after #{next_cursor}")
+        fetch_after(access_token, user_id, next_cursor)
+    end
   end
 
   defp get_unix_time_ms(offset_s \\ 0) do
@@ -48,6 +60,8 @@ defmodule SpotMe.RecentlyPlayedServer do
       |> DateTime.add(-1 * offset_s, :second)
       |> DateTime.to_unix()
 
-    after_seconds * 1000
+    seconds_to_ms(after_seconds)
   end
+
+  def seconds_to_ms(seconds), do: seconds * 1000
 end
