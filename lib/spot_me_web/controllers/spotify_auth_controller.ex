@@ -15,15 +15,11 @@ defmodule SpotMeWeb.SpotifyAuthController do
     profile = Services.Profile.get_profile_data(tokens)
 
     # create the profile
-    {:ok, %SpotifyUser{id: user_id} = spotify_user} = SpotMe.Auth.upsert_spotify_user(profile)
+    {:ok, %SpotifyUser{id: user_id}} = SpotMe.Auth.upsert_spotify_user(profile)
 
     # create tokens
     tokens = Map.put(tokens, :spotify_user_id, user_id)
-    {:ok, token_set} = SpotMe.Auth.upsert_token_set(tokens)
-
-    {:ok, plays} = Services.RecentlyPlayed.get_recently_played_tracks(token_set)
-
-    SpotMe.Playback.record_recent_playback(plays, spotify_user)
+    {:ok, _token_set} = SpotMe.Auth.upsert_token_set(tokens)
 
     redirect(conn, to: "/")
   end

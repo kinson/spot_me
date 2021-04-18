@@ -1,28 +1,16 @@
 defmodule SpotMe.Services.RecentlyPlayed do
-  alias SpotMe.Auth.TokenSet
   alias SpotMe.Configs.Spotify
 
-  def get_recently_played_tracks(%TokenSet{access_token: access_token}, after_ms) do
+  def get_recently_played_tracks(access_token, after_ms) do
     base_url = Spotify.api_base_url()
     endpoint = Spotify.recently_played_endpoint()
-    # query = "?after=#{after_ms}&limit=50"
-    query = "?limit=20"
+    query = "?after=#{after_ms}&limit=50"
 
     headers = [Authorization: "Bearer #{access_token}"]
     url = base_url <> endpoint <> query
 
     HTTPoison.get(url, headers)
     |> parse_response()
-  end
-
-  def get_recently_played_tracks(%TokenSet{} = ts) do
-    after_seconds =
-      DateTime.utc_now()
-      |> DateTime.add(-9000, :second)
-      |> DateTime.to_unix()
-
-    after_ms = after_seconds * 1000
-    get_recently_played_tracks(ts, after_ms)
   end
 
   defp parse_response({:error, err}), do: {:error, err}
@@ -35,8 +23,11 @@ defmodule SpotMe.Services.RecentlyPlayed do
   end
 
   def extract_response_data(body) do
-    Map.get(body, "items")
-    |> Enum.map(&get_play_data/1)
+    items = Map.get(body, "items")
+
+    IO.puts "Fetched #{Enum.count(items)} from Spotify"
+
+    Enum.map(items, &get_play_data/1)
   end
 
   def get_play_data(play) do

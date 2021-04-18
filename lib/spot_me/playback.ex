@@ -582,7 +582,7 @@ defmodule SpotMe.Playback do
     AlbumsArtist.changeset(albums_artist, attrs)
   end
 
-  def record_recent_playback(plays, %SpotMe.Auth.SpotifyUser{id: user_id}) do
+  def record_recent_playback(plays, user_id) do
     Enum.each(plays, fn play ->
       artists = Map.get(play, :artists)
       {:ok, album_id} = Map.get(play, :album) |> upsert_album()
