@@ -10,11 +10,13 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :spot_me, SpotMeWeb.Endpoint,
-  url: [host: "example.com", port: 80],
+  url: [host: "tunes.samwhunter.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
 config :logger, level: :info
+
+config :spot_me, SpotMe.Configs, redirect_uri: "http://tunes.samwhunter.com/spotify/auth/callback"
 
 # ## SSL Support
 #
