@@ -17,8 +17,8 @@ defmodule SpotMe.Application do
       SpotMeWeb.Endpoint,
       # Start a worker by calling: SpotMe.Worker.start_link(arg)
       # {SpotMe.Worker, arg}
-      SpotMe.RecentlyPlayedServer,
-      SpotMe.RefreshTokensServer
+      SpotMe.RefreshTokensServer,
+      SpotMe.RecentlyPlayedServer
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

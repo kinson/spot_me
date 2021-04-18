@@ -8,6 +8,7 @@ defmodule SpotMe.RefreshTokensServer do
   @impl true
   def init(state) do
     IO.puts("STARTING TOKEN REFRESH INTERVAL")
+    refresh_tokens()
     :timer.send_interval(60_000, :work)
 
     {:ok, state}

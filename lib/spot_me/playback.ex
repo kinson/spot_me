@@ -591,6 +591,8 @@ defmodule SpotMe.Playback do
       played_at = Map.get(play, :played_at)
 
       case create_play(%{played_at: played_at, song_id: song_id, spotify_user_id: user_id}) do
+        {:error, %Ecto.Changeset{errors: [played_at: _]}} -> nil
+
         {:error, err} ->
           IO.puts("failed to create new play")
           IO.inspect(err)

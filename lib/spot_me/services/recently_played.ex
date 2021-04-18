@@ -25,7 +25,7 @@ defmodule SpotMe.Services.RecentlyPlayed do
   def extract_response_data(body) do
     items = Map.get(body, "items")
 
-    IO.puts "Fetched #{Enum.count(items)} from Spotify"
+    IO.puts "Fetched #{Enum.count(items)} recently played tracks from Spotify"
 
     Enum.map(items, &get_play_data/1)
   end
