@@ -3,48 +3,56 @@ defmodule SpotMe.Configs.Spotify do
     Application.get_env(:spot_me, SpotMe.Configs)
   end
 
-  def client_id() do
+  defp from_config(atom) do
     module_config()
-    |> Keyword.fetch!(:client_id)
+    |> Keyword.fetch!(atom)
+  end
+
+  def client_id() do
+    from_config(:client_id) ||
+      raise """
+      environment variable SPOTIFY_CLIENT_ID is missing.
+      Maybe you need to run "source .env"?
+      """
   end
 
   def client_secret() do
-    module_config()
-    |> Keyword.fetch!(:client_secret)
+    from_config(:client_secret) ||
+      raise """
+      environment variable SPOTIFY_CLIENT_SECRET is missing.
+      Maybe you need to run "source .env"?
+      """
   end
 
   def auth_base_url() do
-    module_config()
-    |> Keyword.fetch!(:auth_base_url)
+    from_config(:auth_base_url)
   end
 
   def api_base_url() do
-    module_config()
-    |> Keyword.fetch!(:api_base_url)
+    from_config(:api_base_url)
   end
 
   def scopes() do
-    module_config()
-    |> Keyword.fetch!(:scopes)
+    from_config(:scopes)
   end
 
   def redirect_uri do
-    module_config()
-    |> Keyword.fetch!(:redirect_uri)
+    from_config(:redirect_uri)
   end
 
   def authorize_endpoint do
-    module_config()
-    |> Keyword.fetch!(:authorize_endpoint)
+    from_config(:authorize_endpoint)
   end
 
   def token_endpoint do
-    module_config()
-    |> Keyword.fetch!(:token_endpoint)
+    from_config(:token_endpoint)
   end
 
   def profile_endpoint do
-    module_config()
-    |> Keyword.fetch!(:profile_endpoint)
+    from_config(:profile_endpoint)
+  end
+
+  def recently_played_endpoint do
+    from_config(:recently_played_endpoint)
   end
 end

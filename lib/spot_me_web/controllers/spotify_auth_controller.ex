@@ -2,6 +2,7 @@ defmodule SpotMeWeb.SpotifyAuthController do
   use SpotMeWeb, :controller
 
   alias SpotMe.Auth.{SpotifyUser}
+  alias SpotMe.Services
 
   def authenticate_with_spotify(conn, _params) do
     spotify_auth_link = SpotMe.Services.Auth.get_authorization_link()
@@ -10,15 +11,19 @@ defmodule SpotMeWeb.SpotifyAuthController do
 
   def spotify_oauth_callback(conn, %{"code" => code}) do
     # get the auth code
-    {:ok, tokens} = SpotMe.Services.Auth.fetch_tokens_with_authorization_code(code)
-    profile = SpotMe.Services.Profile.get_profile_data(tokens)
+    {:ok, tokens} = Services.Auth.fetch_tokens_with_authorization_code(code)
+    profile = Services.Profile.get_profile_data(tokens)
 
     # create the profile
-    {:ok, %SpotifyUser{id: user_id}} = SpotMe.Auth.upsert_spotify_user(profile)
+    {:ok, %SpotifyUser{id: user_id} = spotify_user} = SpotMe.Auth.upsert_spotify_user(profile)
 
     # create tokens
-    token_set = Map.put(tokens, :spotify_user_id, user_id)
-    SpotMe.Auth.upsert_token_set(token_set)
+    tokens = Map.put(tokens, :spotify_user_id, user_id)
+    {:ok, token_set} = SpotMe.Auth.upsert_token_set(tokens)
+
+    {:ok, plays} = Services.RecentlyPlayed.get_recently_played_tracks(token_set)
+
+    SpotMe.Playback.record_recent_playback(plays, spotify_user)
 
     redirect(conn, to: "/")
   end

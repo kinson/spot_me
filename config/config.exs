@@ -8,18 +8,10 @@
 use Mix.Config
 
 spotify_client_id =
-  System.get_env("SPOTIFY_CLIENT_ID") ||
-    raise """
-    environment variable SPOTIFY_CLIENT_ID is missing.
-    Maybe you need to run "source .env"?
-    """
+  System.get_env("SPOTIFY_CLIENT_ID")
 
 spotify_client_secret =
-  System.get_env("SPOTIFY_CLIENT_SECRET") ||
-    raise """
-    environment variable SPOTIFY_CLIENT_SECRET is missing.
-    Maybe you need to run "source .env"?
-    """
+  System.get_env("SPOTIFY_CLIENT_SECRET")
 
 config :spot_me,
   ecto_repos: [SpotMe.Repo]
@@ -46,6 +38,7 @@ config :spot_me, SpotMe.Configs,
   authorize_endpoint: "/authorize",
   token_endpoint: "/api/token",
   profile_endpoint: "/me",
+  recently_played_endpoint: "/me/player/recently-played",
   scopes: "user-read-recently-played user-read-email",
   client_id: spotify_client_id,
   client_secret: spotify_client_secret
