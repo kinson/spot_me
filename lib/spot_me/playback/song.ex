@@ -10,6 +10,7 @@ defmodule SpotMe.Playback.Song do
 
     belongs_to :album, SpotMe.Playback.Album, type: :binary_id
 
+    many_to_many :artists, SpotMe.Playback.Artist, join_through: "artists_songs"
     timestamps(type: :utc_datetime)
   end
 

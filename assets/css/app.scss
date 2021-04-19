@@ -1,6 +1,8 @@
 /* This file is for your main application css. */
 @import "./phoenix.css";
 
+$gold: rgb(182, 140, 47);
+
 /* Alerts and form errors */
 .alert {
   padding: 15px;
@@ -33,4 +35,154 @@
   color: #a94442;
   display: block;
   margin: -1rem 0 2rem;
+}
+
+div.page {
+  display: flex;
+  flex-direction: column;
+  padding-top: 8rem;
+
+  @media (max-width: 40rem) {
+    padding-top: 4rem;
+  }
+
+  div.tippy-top {
+    display: flex;
+    flex-direction: row;
+
+    div.slash {
+      height: 3rem;
+      width: 2px;
+      background-color: $gold;
+      transform: skew(-15deg);
+      margin: 0 3px;
+    }
+
+    p.tunes {
+      font-size: 1.35em;
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      margin-bottom: 0.75rem;
+
+      @media (max-width: 40rem) {
+        font-size: 1.2em;
+      }
+    }
+  }
+
+  p.big-ol-title {
+    font-size: 2.9em;
+    margin: 0;
+    font-family: "Playfair Display", serif;
+
+    @media (max-width: 40rem) {
+      font-size: 1.75em;
+    }
+  }
+
+  p.lil-bro {
+    font-size: 1.2em;
+    font-size: #444;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+    font-family: "Libre Baskerville", serif;
+
+    @media (max-width: 40rem) {
+      font-size: 1.05em;
+    }
+  }
+
+  div.separator {
+    width: 6rem;
+    height: 2px;
+    background: $gold;
+    margin: 0 0 1rem 0;
+  }
+
+  div.songcontainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 2.3rem auto;
+
+    svg g {
+      stroke: $gold;
+    }
+
+    & > svg {
+      transform: translateY(-15px);
+      margin-right: 1rem;
+
+      @media (max-width: 40rem) {
+        margin-right: 0.25rem;
+      }
+    }
+
+    img.album-cover {
+      width: 10rem;
+      margin: 0 2rem;
+
+      @media (max-width: 40rem) {
+        width: 9rem;
+        margin: 0 1rem;
+      }
+    }
+
+    div.info {
+      width: 40rem;
+
+      @media (max-width: 40rem) {
+        width: 30rem;
+      }
+
+      div.arow {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        span {
+          width: 2rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          svg g {
+            opacity: 0.89;
+          }
+        }
+      }
+
+      p {
+        margin: 0.2rem 0.5rem;
+        font-family: "Libre Baskerville", serif;
+        opacity: 0.8;
+      }
+
+      p.first-row {
+        font-size: 1.15em;
+
+        @media (max-width: 40rem) {
+          font-size: 0.85em;
+        }
+      }
+
+      p.second-row {
+        margin-left: 0.6rem;
+        font-size: 1.05em;
+
+        @media (max-width: 40rem) {
+          font-size: 0.8em;
+        }
+      }
+
+      p.third-row {
+        margin-left: 0.6rem;
+        font-size: 1.05em;
+
+        @media (max-width: 40rem) {
+          font-size: 0.8em;
+        }
+      }
+    }
+  }
 }

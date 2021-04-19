@@ -21,6 +21,12 @@ defmodule SpotMe.Playback do
     Repo.all(Play)
   end
 
+  def list_recent_plays() do
+    from(p in Play, order_by: [desc: p.played_at], select: p, limit: 80)
+    |> Repo.all()
+    |> Repo.preload(song: [:artists, :album])
+  end
+
   def most_recent_play_time() do
     one_day_ago = DateTime.utc_now() |> DateTime.add(-1 * 24 * 60 * 60, :second)
 
