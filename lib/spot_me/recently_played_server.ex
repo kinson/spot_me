@@ -23,18 +23,18 @@ defmodule SpotMe.RecentlyPlayedServer do
 
   def fetch_recent_plays(%{after_ms: after_ms}) do
     # get users and access tokens
-    IO.puts("fetching recently played tracks after #{after_ms}")
+    IO.puts("fetching recently played tracks after #{human_readable_timestamp(after_ms)}")
     users = SpotMe.Auth.get_users_and_live_tokens()
 
     Enum.each(users, fn {user_id, access_token} ->
       fetch_after(access_token, user_id, after_ms)
     end)
 
-    %{after_ms: get_unix_time_ms()}
+    %{after_ms: most_recent_play_unix_ms()}
   end
 
   def fetch_recent_plays(_) do
-    unix_time_ms = SpotMe.Playback.most_recent_play() |> seconds_to_ms()
+    unix_time_ms = most_recent_play_unix_ms()
     fetch_recent_plays(%{after_ms: unix_time_ms})
   end
 
@@ -49,19 +49,24 @@ defmodule SpotMe.RecentlyPlayedServer do
         nil
 
       next_cursor ->
-        IO.puts("Fetching next page of tracks after #{next_cursor}")
+        IO.puts("Fetching next page of tracks after #{human_readable_timestamp(next_cursor)}")
         fetch_after(access_token, user_id, next_cursor)
     end
   end
 
-  defp get_unix_time_ms(offset_s \\ 0) do
-    after_seconds =
-      DateTime.utc_now()
-      |> DateTime.add(-1 * offset_s, :second)
-      |> DateTime.to_unix()
-
-    seconds_to_ms(after_seconds)
+  defp most_recent_play_unix_ms() do
+    SpotMe.Playback.most_recent_play_time() |> seconds_to_ms()
   end
 
   def seconds_to_ms(seconds), do: seconds * 1000
+
+  defp human_readable_timestamp(ms_string) when is_binary(ms_string) do
+    String.to_integer(ms_string)
+    |> human_readable_timestamp()
+  end
+
+  defp human_readable_timestamp(ms) do
+    {:ok, dt} = DateTime.from_unix(ms, :millisecond)
+    DateTime.add(dt, -1 * 60 * 60 * 6, :second)
+  end
 end

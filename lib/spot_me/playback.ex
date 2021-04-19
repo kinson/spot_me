@@ -21,12 +21,12 @@ defmodule SpotMe.Playback do
     Repo.all(Play)
   end
 
-  def most_recent_play() do
+  def most_recent_play_time() do
     one_day_ago = DateTime.utc_now() |> DateTime.add(-1 * 24 * 60 * 60, :second)
 
     case from(p in Play,
-           select: p.inserted_at,
-           order_by: [desc: p.inserted_at],
+           select: p.played_at,
+           order_by: [desc: p.played_at],
            limit: 1
          )
          |> Repo.all() do
@@ -34,6 +34,19 @@ defmodule SpotMe.Playback do
       results -> hd(results)
     end
     |> DateTime.to_unix()
+  end
+
+  def get_most_recent_play(spotify_user_id) do
+    case from(p in Play,
+           select: p,
+           where: p.spotify_user_id == ^spotify_user_id,
+           order_by: [desc: p.inserted_at],
+           limit: 1
+         )
+         |> Repo.all() do
+      [] -> nil
+      plays -> hd(plays)
+    end
   end
 
   @doc """
@@ -597,26 +610,75 @@ defmodule SpotMe.Playback do
     AlbumsArtist.changeset(albums_artist, attrs)
   end
 
+  def filter_duplicate_plays(plays) do
+    {without_duplicates, _} = Enum.reduce(plays, {[], %{}}, fn %{song_id: song_id, played_at: played_at} = play,
+                                     {play_list, song_id_played_map} ->
+      acc_with_play = {[play | play_list], Map.put_new(song_id_played_map, song_id, played_at)}
+
+      case Map.get(song_id_played_map, song_id) do
+        nil ->
+          acc_with_play
+
+        existing_played_at ->
+          case Play.is_duplicate_play?(existing_played_at, played_at) do
+            true -> {play_list, song_id_played_map}
+            false -> acc_with_play
+          end
+      end
+    end)
+
+    without_duplicates
+  end
+
   def record_recent_playback(plays, user_id) do
-    Enum.each(plays, fn play ->
+    most_recent_play = get_most_recent_play(user_id)
+
+    Enum.map(plays, fn play ->
       artists = Map.get(play, :artists)
       {:ok, album_id} = Map.get(play, :album) |> upsert_album()
       {:ok, %Song{id: song_id}} = Map.get(play, :song) |> upsert_song(album_id, artists)
 
       played_at = Map.get(play, :played_at)
 
-      case create_play(%{played_at: played_at, song_id: song_id, spotify_user_id: user_id}) do
-        {:error, %Ecto.Changeset{errors: [played_at: _]}} ->
-          nil
-
-        {:error, err} ->
-          IO.puts("failed to create new play")
-          IO.inspect(err)
-
-        _ ->
-          nil
+      %{
+        played_at: played_at,
+        song_id: song_id,
+        spotify_user_id: user_id
+      }
+    end)
+    |> filter_duplicate_plays()
+    |> Enum.each(fn play_data ->
+      if not is_play_duplicate?(most_recent_play, play_data) do
+        create_play(play_data)
+        |> handle_create_play_errors()
       end
     end)
+  end
+
+  defp is_play_duplicate?(nil, _), do: false
+
+  defp is_play_duplicate?(%Play{played_at: played_at, song_id: song_id}, %{
+         played_at: new_track_played_at,
+         song_id: new_track_song_id
+       }) do
+    case song_id == new_track_song_id do
+      false -> false
+      true -> Play.is_duplicate_play?(new_track_played_at, played_at)
+    end
+  end
+
+  def handle_create_play_errors(create_result) do
+    case create_result do
+      {:error, %Ecto.Changeset{errors: [played_at: _]}} ->
+        nil
+
+      {:error, err} ->
+        IO.puts("failed to create new play")
+        IO.inspect(err)
+
+      _ ->
+        nil
+    end
   end
 
   def upsert_album(nil), do: nil

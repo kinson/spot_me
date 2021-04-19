@@ -9,7 +9,7 @@ defmodule SpotMe.RefreshTokensServer do
   def init(state) do
     IO.puts("STARTING TOKEN REFRESH INTERVAL")
     refresh_tokens()
-    :timer.send_interval(60_000, :work)
+    :timer.send_interval(180_000, :work)
 
     {:ok, state}
   end
@@ -21,11 +21,11 @@ defmodule SpotMe.RefreshTokensServer do
   end
 
   def refresh_tokens do
-    five_minutes_from_now =
+    seven_minutes_from_now =
       DateTime.utc_now()
-      |> DateTime.add(60 * 5, :second)
+      |> DateTime.add(60 * 7, :second)
 
-    tokens = SpotMe.Auth.get_tokens_near_expiration(five_minutes_from_now)
+    tokens = SpotMe.Auth.get_tokens_near_expiration(seven_minutes_from_now)
 
     IO.puts "refreshing #{Enum.count(tokens)} tokens"
 
