@@ -43,7 +43,7 @@ div.page {
   padding-top: 8rem;
 
   @media (max-width: 40rem) {
-    padding-top: 4rem;
+    padding-top: 3rem;
   }
 
   div.tippy-top {
@@ -76,7 +76,7 @@ div.page {
     font-family: "Playfair Display", serif;
 
     @media (max-width: 40rem) {
-      font-size: 1.75em;
+      font-size: 1.9em;
     }
   }
 
@@ -88,7 +88,7 @@ div.page {
     font-family: "Libre Baskerville", serif;
 
     @media (max-width: 40rem) {
-      font-size: 1.05em;
+      font-size: 1em;
     }
   }
 
@@ -96,7 +96,7 @@ div.page {
     width: 6rem;
     height: 2px;
     background: $gold;
-    margin: 0 0 1rem 0;
+    margin: 0.25rem 0 1.25rem 0;
   }
 
   div.songcontainer {
@@ -132,7 +132,7 @@ div.page {
       width: 40rem;
 
       @media (max-width: 40rem) {
-        width: 30rem;
+        width: auto;
       }
 
       div.arow {

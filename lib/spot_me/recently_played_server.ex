@@ -10,7 +10,7 @@ defmodule SpotMe.RecentlyPlayedServer do
     IO.puts("STARTING RECENTLY PLAYED POLLING INTERVAL")
     new_state = fetch_recent_plays(state)
 
-    :timer.send_interval(1000_000, :work)
+    :timer.send_interval(750_000, :work)
 
     {:ok, new_state}
   end
