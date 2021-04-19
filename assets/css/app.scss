@@ -105,6 +105,10 @@ div.page {
     align-items: center;
     margin: 2.3rem auto;
 
+    @media (max-width: 40rem) {
+      margin: 2.3rem 0;
+    }
+
     svg g {
       stroke: $gold;
     }

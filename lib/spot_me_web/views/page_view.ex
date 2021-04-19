@@ -54,6 +54,7 @@ defmodule SpotMeWeb.PageView do
 
   def truncate_text(text, limit) do
     total = limit - 2
+
     case String.length(text) > limit do
       false -> text
       true -> String.slice(text, 0..total) <> ".."
@@ -68,7 +69,11 @@ defmodule SpotMeWeb.PageView do
   end
 
   def second_row(song) do
-    hd(song.artists) |> Map.get(:name) |> truncate_text(36)
+    song.artists
+    |> Enum.sort()
+    |> Enum.map(&Map.get(&1, :name))
+    |> Enum.join(", ")
+    |> truncate_text(36)
   end
 
   def third_row(count, song) do

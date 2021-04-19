@@ -27,7 +27,7 @@
         </div>
         <div class="arow">
           <span><%= artist_icon() %></span>
-          <p class="second-row"><%=  second_row(song) %></p>
+          <p class="second-row"><%= second_row(song) %></p>
         </div>
         <div class="arow">
           <span><%= third_row_icon(count) %></span>
