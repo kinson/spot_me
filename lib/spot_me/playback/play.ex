@@ -27,7 +27,7 @@ defmodule SpotMe.Playback.Play do
 
     case diff < 15 * 60 do
       true ->
-        IO.puts "Deduping play"
+        IO.puts("Deduping play")
         true
 
       false ->
@@ -52,5 +52,23 @@ defmodule SpotMe.Playback.Play do
     {:ok, two, _} = DateTime.from_iso8601(played_at_two)
 
     is_duplicate_play?(one, two)
+  end
+
+  def get_display_list(plays) do
+    Enum.reduce(plays, [nil], fn play, acc ->
+      [top | rest] = acc
+
+      case top do
+        nil ->
+          [{1, play.song}]
+
+        {count, song} ->
+          case song.album.id == play.song.album.id do
+            true -> [{count + 1, song} | rest]
+            false -> [{1, play.song} | acc]
+          end
+      end
+    end)
+    |> Enum.reverse()
   end
 end

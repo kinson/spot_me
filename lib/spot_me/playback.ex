@@ -22,7 +22,7 @@ defmodule SpotMe.Playback do
   end
 
   def list_recent_plays() do
-    from(p in Play, order_by: [desc: p.played_at], select: p, limit: 80)
+    from(p in Play, order_by: [desc: p.played_at], select: p, limit: 100)
     |> Repo.all()
     |> Repo.preload(song: [:artists, :album])
   end
