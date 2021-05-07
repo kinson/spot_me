@@ -7,6 +7,37 @@
   <p class="big-ol-title">What I've Been Listening to Recently</p>
   <p class="lil-bro">[on Spotify]</p>
   <div class="separator"></div>
+  <%= if not is_nil(@currently_playing) do %>
+    <div class="currently-playing-container">
+      <div class="inner-container">
+        <div class="description">
+          <div class="bars-group">
+            <span class="bar" id="one"></span>
+            <span class="bar" id="two"></span>
+            <span class="bar" id="three"></span>
+          </div>
+          <p>CURRENTLY PLAYING</p>
+        </div>
+        <div class="songcontainer">
+          <img class="album-cover" src="<%= @currently_playing.album_cover %>" />
+          <div class="info">
+            <div class="arow">
+              <span><%= first_row_icon(1) %></span>
+              <p class="first-row"><%= @currently_playing.name %></p>
+            </div>
+            <div class="arow">
+              <span><%= artist_icon() %></span>
+              <p class="second-row"><%= @currently_playing.artists %></p>
+            </div>
+            <div class="arow">
+              <span><%= third_row_icon(1) %></span>
+              <p class="third-row"><%= @currently_playing.album_name %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
   <%= for {count, song} <- @plays do %>
     <div class="songcontainer">
       <svg width="29px" height="56px" viewBox="0 0 29 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

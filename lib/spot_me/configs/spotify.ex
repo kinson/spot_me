@@ -55,4 +55,8 @@ defmodule SpotMe.Configs.Spotify do
   def recently_played_endpoint do
     from_config(:recently_played_endpoint)
   end
+
+  def currently_playing_endpoint do
+    from_config(:currently_playing_endpoint)
+  end
 end

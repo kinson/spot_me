@@ -3,7 +3,8 @@ defmodule SpotMeWeb.PageController do
 
   def index(conn, _params) do
     plays = SpotMe.TunesCacheServer.get_recent_plays()
+    currently_playing = SpotMe.TunesCacheServer.get_currently_playing()
 
-    render(conn, "index.html", plays: plays)
+    render(conn, "index.html", plays: plays, currently_playing: currently_playing)
   end
 end

@@ -75,6 +75,86 @@ div.page {
     margin: 0.25rem 0 1.25rem 0;
   }
 
+  div.currently-playing-container {
+    border-bottom: 2px solid $gold;
+    display: flex;
+    align-items: center;
+
+    div.inner-container {
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+
+      div.songcontainer {
+        margin-top: 1.5rem;
+
+        img.album-cover {
+          margin-left: 0;
+        }
+
+        div.info {
+          max-width: 40rem;
+          width: unset;
+        }
+      }
+
+      div.description {
+        display: flex;
+        flex-direction: row;
+        margin-left: 0.5rem;
+
+        p {
+          font-family: "Playfair Display", serif;
+          margin: 0 1rem;
+          letter-spacing: 2px;
+          font-size: 0.85em;
+          color: #555;
+        }
+
+        div.bars-group {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-end;
+          margin-bottom: 0.5rem;
+          height: 1.6rem;
+
+          span {
+            background-color: $gold;
+            width: 3px;
+            height: 1.3rem;
+            margin: 0 0.2rem;
+
+            @keyframes bouncing-bars {
+              0% {
+                height: 0rem;
+              }
+
+              75% {
+                height: 1.25rem;
+              }
+
+              100% {
+                height: 0;
+              }
+            }
+
+            &#one {
+              animation: bouncing-bars 0.82s ease 0s infinite;
+            }
+
+            &#two {
+              animation: bouncing-bars 0.82s ease 0.15s infinite;
+            }
+
+            &#three {
+              animation: bouncing-bars 0.82s ease 0.3s infinite;
+            }
+          }
+        }
+      }
+    }
+  }
+
   div.songcontainer {
     display: flex;
     flex-direction: row;
@@ -105,7 +185,7 @@ div.page {
     }
 
     img.album-cover {
-      width: 10rem;
+      width: 9rem;
       margin: 0 2rem;
 
       @media (max-width: 40rem) {
@@ -145,28 +225,28 @@ div.page {
       }
 
       p.first-row {
-        font-size: 1.15em;
+        font-size: 0.95em;
 
         @media (max-width: 40rem) {
-          font-size: 0.85em;
+          font-size: 0.8em;
         }
       }
 
       p.second-row {
         margin-left: 0.6rem;
-        font-size: 1.05em;
+        font-size: 0.9em;
 
         @media (max-width: 40rem) {
-          font-size: 0.8em;
+          font-size: 0.75em;
         }
       }
 
       p.third-row {
         margin-left: 0.6rem;
-        font-size: 1.05em;
+        font-size: 0.9em;
 
         @media (max-width: 40rem) {
-          font-size: 0.8em;
+          font-size: 0.75em;
         }
       }
     }
@@ -206,7 +286,8 @@ footer#tunes-footer {
   align-items: center;
   margin: 2.5rem 0;
 
-  a, p {
+  a,
+  p {
     font-size: 0.94em;
   }
 

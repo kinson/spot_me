@@ -7,11 +7,9 @@
 # General application configuration
 use Mix.Config
 
-spotify_client_id =
-  System.get_env("SPOTIFY_CLIENT_ID")
+spotify_client_id = System.get_env("SPOTIFY_CLIENT_ID")
 
-spotify_client_secret =
-  System.get_env("SPOTIFY_CLIENT_SECRET")
+spotify_client_secret = System.get_env("SPOTIFY_CLIENT_SECRET")
 
 config :spot_me,
   ecto_repos: [SpotMe.Repo]
@@ -39,7 +37,8 @@ config :spot_me, SpotMe.Configs,
   token_endpoint: "/api/token",
   profile_endpoint: "/me",
   recently_played_endpoint: "/me/player/recently-played",
-  scopes: "user-read-recently-played user-read-email",
+  currently_playing_endpoint: "/me/player",
+  scopes: "user-read-recently-played user-read-email user-read-playback-state",
   client_id: spotify_client_id,
   client_secret: spotify_client_secret
 
