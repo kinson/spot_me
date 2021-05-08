@@ -23,15 +23,15 @@
           <div class="info">
             <div class="arow">
               <span><%= first_row_icon(1) %></span>
-              <p class="first-row"><%= @currently_playing.name %></p>
+              <a class="first-row" href="<%= song_link(@currently_playing) %>" target="_blank"><%= @currently_playing.name %></a>
             </div>
             <div class="arow">
               <span><%= artist_icon() %></span>
-              <p class="second-row"><%= @currently_playing.artists %></p>
+              <a class="second-row" href="<%= artist_link(@currently_playing) %>" target="_blank"><%= @currently_playing.artists %></a>
             </div>
             <div class="arow">
               <span><%= third_row_icon(1) %></span>
-              <p class="third-row"><%= @currently_playing.album_name %></p>
+              <a class="third-row" href="<%= album_link(@currently_playing) %>" target="_blank"><%= @currently_playing.album_name %></a>
             </div>
           </div>
         </div>
@@ -51,28 +51,28 @@
         </g>
       </svg>
       <img class="album-cover" src="<%= album_image(song) %>" />
-      <div class="info">
-        <div class="arow">
-          <span><%= first_row_icon(count) %></span>
-          <p class="first-row"><%= first_row(count, song) %></p>
+              <div class="info">
+                <div class="arow">
+                  <span><%= first_row_icon(count) %></span>
+                  <a class="first-row" href="<%= first_row_link(count, song) %>" target="_blank"><%= first_row(count, song) %></a>
+                </div>
+                <div class="arow">
+                  <span><%= artist_icon() %></span>
+                  <a class="second-row" href="<%= artist_link(song) %>" target="_blank"><%= second_row(song) %></a>
+                </div>
+                <div class="arow">
+                  <span><%= third_row_icon(count) %></span>
+                  <a class="third-row" href="<%= album_link(song) %>" target="_blank"><%= third_row(count, song) %></a>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          <footer id="tunes-footer">
+            <a href="https://open.spotify.com/user/sam.hunter">Find me on Spofity</a>
+            <div class="tippy-top">
+              <div class="slash"></div>
+              <p class="tunes">click on any of the songs, artists, or albums to listen.<br />thanks for stopping by,<br /> ✌️ Sam</p>
+              <div class="slash"></div>
+            </div>
+          </footer>
         </div>
-        <div class="arow">
-          <span><%= artist_icon() %></span>
-          <p class="second-row"><%= second_row(song) %></p>
-        </div>
-        <div class="arow">
-          <span><%= third_row_icon(count) %></span>
-          <p class="third-row"><%= third_row(count, song) %></p>
-        </div>
-      </div>
-    </div>
-  <% end %>
-  <footer id="tunes-footer">
-    <a href="https://open.spotify.com/user/sam.hunter">Find me on Spofity</a>
-    <div class="tippy-top">
-      <div class="slash"></div>
-      <p class="tunes">thanks for stopping by</p>
-      <div class="slash"></div>
-    </div>
-  </footer>
-</div>

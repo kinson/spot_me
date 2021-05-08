@@ -39,18 +39,27 @@ defmodule SpotMe.Services.CurrentlyPlaying do
 
     artists =
       Map.get(play, "artists")
-      |> Enum.map(fn artist ->
+      |> Enum.sort()
+
+    artists_names =
+      Enum.map(artists, fn artist ->
         Map.get(artist, "name")
       end)
       |> Enum.join(", ")
 
+    artist_id = hd(artists) |> Map.get("id")
     album_name = Map.get(album, "name")
+    song_id = Map.get(play, "id")
+    album_id = Map.get(album, "id")
 
     %{
       name: name,
       album_cover: album_cover,
-      artists: artists,
-      album_name: album_name
+      artists: artists_names,
+      album_name: album_name,
+      song_id: song_id,
+      album_id: album_id,
+      artist_id: artist_id
     }
   end
 end

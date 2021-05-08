@@ -1,6 +1,8 @@
 defmodule SpotMeWeb.PageView do
   use SpotMeWeb, :view
 
+  alias SpotMe.Playback.Song
+
   def disc_icon() do
     ~E"""
     <svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -95,5 +97,46 @@ defmodule SpotMeWeb.PageView do
       true -> disc_icon()
       false -> album_icon()
     end
+  end
+
+  def first_row_link(count, song) do
+    case count > 1 do
+      true -> album_link(song)
+      false -> song_link(song)
+    end
+  end
+
+  def artist_link(%Song{} = song) do
+    id =
+      song.artists
+      |> Enum.sort()
+      |> Enum.map(&Map.get(&1, :ext_spotify_id))
+      |> hd()
+
+    "https://open.spotify.com/artist/" <> id
+  end
+
+  def artist_link(%{artist_id: id}) do
+    "https://open.spotify.com/artist/" <> id
+  end
+
+  def song_link(%Song{} = song) do
+    id = song.ext_spotify_id
+
+    "https://open.spotify.com/track/" <> id
+  end
+
+  def song_link(%{song_id: id}) do
+    "https://open.spotify.com/track/" <> id
+  end
+
+  def album_link(%Song{} = song) do
+    id = song.album.ext_spotify_id
+
+    "https://open.spotify.com/album/" <> id
+  end
+
+  def album_link(%{album_id: id}) do
+    "https://open.spotify.com/album/" <> id
   end
 end
