@@ -16,15 +16,16 @@ defmodule SpotMe.Services.CurrentlyPlaying do
 
   defp parse_response({:ok, response}) do
     case Map.get(response, :body) |> Jason.decode() do
-      {:ok, body} -> {:ok, extract_response_data(body)}
-      _ -> {:ok, nil}
+      {:ok, %{"item" => track, "currently_playing_type" => "track"}} ->
+        {:ok, extract_response_data(track)}
+
+      _ ->
+        {:ok, nil}
     end
   end
 
-  def extract_response_data(body) do
-    play = Map.get(body, "item")
-
-    get_play_data(play)
+  def extract_response_data(track) do
+    get_play_data(track)
   end
 
   def get_play_data(play) do
