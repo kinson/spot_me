@@ -11,6 +11,8 @@ spotify_client_id = System.get_env("SPOTIFY_CLIENT_ID")
 
 spotify_client_secret = System.get_env("SPOTIFY_CLIENT_SECRET")
 
+sentry_dsn = System.get_env("SENTRY_DSN")
+
 config :spot_me,
   ecto_repos: [SpotMe.Repo]
 
@@ -41,6 +43,16 @@ config :spot_me, SpotMe.Configs,
   scopes: "user-read-recently-played user-read-email user-read-playback-state",
   client_id: spotify_client_id,
   client_secret: spotify_client_secret
+
+config :sentry,
+  dsn: sentry_dsn,
+  environment_name: :prod,
+  enable_source_code_context: true,
+  root_source_code_path: File.cwd!(),
+  tags: %{
+    env: "production"
+  },
+  included_environments: [:prod]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

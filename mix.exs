@@ -34,6 +34,7 @@ defmodule SpotMe.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.8"},
+      {:sentry, "~> 8.0"},
       {:phoenix, "~> 1.5.9"},
       {:phoenix_ecto, "~> 4.2"},
       {:ecto_sql, "~> 3.6"},

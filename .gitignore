@@ -38,3 +38,7 @@ tmp/
 
 # no secrets please
 .env
+
+_build/
+
+.elixir_ls/
