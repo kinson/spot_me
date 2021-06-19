@@ -4,7 +4,8 @@ defmodule SpotMeWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
-    plug :fetch_flash
+    plug :fetch_live_flash
+    plug :put_root_layout, {SpotMeWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -17,6 +18,7 @@ defmodule SpotMeWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/queue", PageController, :queue_it
 
     get "/spotify/auth", SpotifyAuthController, :authenticate_with_spotify
     get "/spotify/auth/callback", SpotifyAuthController, :spotify_oauth_callback

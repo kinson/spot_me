@@ -7,4 +7,8 @@ defmodule SpotMeWeb.PageController do
 
     render(conn, "index.html", plays: plays, currently_playing: currently_playing)
   end
+
+  def queue_it(conn, _params) do
+    render(conn, "queue.html")
+  end
 end

@@ -1,0 +1,14 @@
+<div class="page">
+  <div class="tippy-top">
+    <div class="slash"></div>
+    <p class="tunes">tunes</p>
+    <div class="slash"></div>
+  </div>
+
+  <p class="big-ol-title">Queue An Album</p>
+  <p class="lil-bro">[on Spotify]</p>
+
+  <div class="separator"></div>
+
+  <%= live_render(@conn, SpotMeWeb.QueueLive.Index) %>
+</div>

@@ -59,4 +59,16 @@ defmodule SpotMe.Configs.Spotify do
   def currently_playing_endpoint do
     from_config(:currently_playing_endpoint)
   end
+
+  def search_endpoint do
+    from_config(:search_endpoint)
+  end
+
+  def start_play_endpoint do
+    from_config(:start_play_endpoint)
+  end
+
+  def queue_track_endpoint do
+    from_config(:queue_track_endpoint)
+  end
 end

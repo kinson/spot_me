@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
   </head>
   <body>
-    <main role="main" class="container">
+    <main role="main" class="container max-w-7xl">
       <%= @inner_content %>
     </main>
   </body>
