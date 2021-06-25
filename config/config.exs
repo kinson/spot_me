@@ -43,7 +43,8 @@ config :spot_me, SpotMe.Configs,
   search_endpoint: "/search",
   start_play_endpoint: "/me/player/play",
   queue_track_endpoint: "/me/player/queue",
-  scopes: "user-read-recently-played user-read-email user-read-playback-state user-modify-playback-state",
+  saved_albums_endpoint: "/me/albums",
+  scopes: "user-read-recently-played user-read-email user-read-playback-state user-modify-playback-state user-library-read",
   client_id: spotify_client_id,
   client_secret: spotify_client_secret
 

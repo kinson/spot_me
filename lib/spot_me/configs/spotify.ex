@@ -71,4 +71,8 @@ defmodule SpotMe.Configs.Spotify do
   def queue_track_endpoint do
     from_config(:queue_track_endpoint)
   end
+
+  def saved_albums_endpoint do
+    from_config(:saved_albums_endpoint)
+  end
 end

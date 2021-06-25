@@ -3,9 +3,21 @@ defmodule SpotMeWeb.QueueLive.Index do
 
   use SpotMeWeb, :live_view
 
+  alias SpotMe.Services.Models.AlbumResult
+
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    token = get_access_token()
+    recently_played_album_ids = SpotMe.Playback.get_recently_played_albums()
+    {:ok, library_albums} = SpotMe.Services.Library.get_albums(token)
+
+    recs =
+      Enum.filter(library_albums, fn %AlbumResult{uri: uri} ->
+        Enum.member?(recently_played_album_ids, uri) == false
+      end)
+      |> Enum.take_random(4)
+
+    {:ok, assign(socket, :recs, recs)}
   end
 
   @impl true
