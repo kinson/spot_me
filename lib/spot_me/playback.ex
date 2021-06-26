@@ -55,6 +55,28 @@ defmodule SpotMe.Playback do
     end
   end
 
+  def get_recently_played_albums() do
+    hour = 60 * 60
+
+    ten_days_ago = DateTime.add(DateTime.utc_now(), -1 * 24 * 14 * hour)
+
+    from(p in Play,
+      join: s in assoc(p, :song),
+      join: a in assoc(s, :album),
+      select: {a.id, sum(s.duration_ms) / 1000},
+      group_by: a.id,
+      where: p.inserted_at > ^ten_days_ago
+    )
+    |> Repo.all()
+    |> Enum.filter(fn {_, duration_s} ->
+      duration_s > 20 * 60
+    end)
+    |> Enum.sort(fn {_, d1}, {_, d2} ->
+      d1 >= d2
+    end)
+    |> Enum.map(fn {id, _} -> id end)
+  end
+
   @doc """
   Gets a single play.
 
@@ -617,21 +639,22 @@ defmodule SpotMe.Playback do
   end
 
   def filter_duplicate_plays(plays) do
-    {without_duplicates, _} = Enum.reduce(plays, {[], %{}}, fn %{song_id: song_id, played_at: played_at} = play,
-                                     {play_list, song_id_played_map} ->
-      acc_with_play = {[play | play_list], Map.put_new(song_id_played_map, song_id, played_at)}
+    {without_duplicates, _} =
+      Enum.reduce(plays, {[], %{}}, fn %{song_id: song_id, played_at: played_at} = play,
+                                       {play_list, song_id_played_map} ->
+        acc_with_play = {[play | play_list], Map.put_new(song_id_played_map, song_id, played_at)}
 
-      case Map.get(song_id_played_map, song_id) do
-        nil ->
-          acc_with_play
+        case Map.get(song_id_played_map, song_id) do
+          nil ->
+            acc_with_play
 
-        existing_played_at ->
-          case Play.is_duplicate_play?(existing_played_at, played_at) do
-            true -> {play_list, song_id_played_map}
-            false -> acc_with_play
-          end
-      end
-    end)
+          existing_played_at ->
+            case Play.is_duplicate_play?(existing_played_at, played_at) do
+              true -> {play_list, song_id_played_map}
+              false -> acc_with_play
+            end
+        end
+      end)
 
     without_duplicates
   end

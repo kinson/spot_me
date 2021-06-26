@@ -19,6 +19,7 @@ defmodule SpotMe.Application do
       # {SpotMe.Worker, arg}
       SpotMe.RefreshTokensServer,
       SpotMe.RecentlyPlayedServer,
+      SpotMe.SearchCacheServer,
       SpotMe.TunesCacheServer
     ]
 
