@@ -19,7 +19,7 @@ defmodule SpotMe.Application do
       # {SpotMe.Worker, arg}
       SpotMe.RefreshTokensServer,
       SpotMe.RecentlyPlayedServer,
-      SpotMe.TunesCacheServer
+      Fiat.CacheServer
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

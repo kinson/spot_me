@@ -1,6 +1,18 @@
 defmodule SpotMe.Services.CurrentlyPlaying do
   alias SpotMe.Configs.Spotify
 
+  def get_currently_playing_tracks!(access_token) do
+    case get_currently_playing_tracks(access_token) do
+      {:ok, token} ->
+        token
+
+      {:error, _} ->
+        raise """
+        Failed to get currently playing track
+        """
+    end
+  end
+
   def get_currently_playing_tracks(access_token) do
     base_url = Spotify.api_base_url()
     endpoint = Spotify.currently_playing_endpoint()
