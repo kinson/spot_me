@@ -33,7 +33,7 @@ defmodule SpotMe.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:fiat, "~> 0.1"},
+      {:fiat, "0.1.3"},
       {:httpoison, "~> 1.8"},
       {:sentry, "~> 8.0"},
       {:phoenix, "~> 1.5.9"},

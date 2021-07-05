@@ -61,21 +61,22 @@ defmodule SpotMe.Playback do
   end
 
   def filter_duplicate_plays(plays) do
-    {without_duplicates, _} = Enum.reduce(plays, {[], %{}}, fn %{song_id: song_id, played_at: played_at} = play,
-                                     {play_list, song_id_played_map} ->
-      acc_with_play = {[play | play_list], Map.put_new(song_id_played_map, song_id, played_at)}
+    {without_duplicates, _} =
+      Enum.reduce(plays, {[], %{}}, fn %{song_id: song_id, played_at: played_at} = play,
+                                       {play_list, song_id_played_map} ->
+        acc_with_play = {[play | play_list], Map.put_new(song_id_played_map, song_id, played_at)}
 
-      case Map.get(song_id_played_map, song_id) do
-        nil ->
-          acc_with_play
+        case Map.get(song_id_played_map, song_id) do
+          nil ->
+            acc_with_play
 
-        existing_played_at ->
-          case Play.is_duplicate_play?(existing_played_at, played_at) do
-            true -> {play_list, song_id_played_map}
-            false -> acc_with_play
-          end
-      end
-    end)
+          existing_played_at ->
+            case Play.is_duplicate_play?(existing_played_at, played_at) do
+              true -> {play_list, song_id_played_map}
+              false -> acc_with_play
+            end
+        end
+      end)
 
     without_duplicates
   end
@@ -273,5 +274,56 @@ defmodule SpotMe.Playback do
           nil
       end
     end)
+  end
+
+  def top_played_songs() do
+    songs_query =
+      from(p in Play,
+        select: %{song_id: p.song_id, count: count(p.song_id)},
+        where: p.inserted_at > ^two_weeks_ago(),
+        group_by: p.song_id
+      )
+
+    from(s in Song,
+      join: q in subquery(songs_query),
+      on: s.id == q.song_id,
+      select: %{name: s.name, count: q.count},
+      order_by: [desc: q.count, desc: s.id],
+      limit: 10
+    )
+    |> Repo.all()
+  end
+
+  def top_played_albums() do
+    albums_query =
+      from(p in Play,
+        join: s in assoc(p, :song),
+        select: %{album_id: s.album_id, sum: sum(s.duration_ms)},
+        where: p.inserted_at > ^two_weeks_ago(),
+        group_by: s.album_id
+      )
+
+    from(a in Album,
+      join: q in subquery(albums_query),
+      on: a.id == q.album_id,
+      select: %{name: a.name, total_ms: q.sum / 1000},
+      order_by: [desc: q.sum, desc: a.id],
+      limit: 10
+    )
+    |> Repo.all()
+  end
+
+  def recent_song_totals() do
+    from(p in Play,
+      join: s in assoc(p, :song),
+      select: %{count: count(p.id), sum: sum(s.duration_ms / 1000)},
+      where: p.inserted_at > ^two_weeks_ago()
+    )
+    |> Repo.all()
+  end
+
+  defp two_weeks_ago do
+    two_weeks = 14 * 24 * 60 * 60
+    DateTime.add(DateTime.utc_now(), two_weeks * -1, :second)
   end
 end

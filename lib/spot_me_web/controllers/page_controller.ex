@@ -21,4 +21,14 @@ defmodule SpotMeWeb.PageController do
     Playback.list_recent_plays()
     |> Playback.Play.get_display_list()
   end
+
+  def stats(conn, _params) do
+    recent_songs = Playback.top_played_songs()
+    recent_albums = Playback.top_played_albums()
+    song_totals = Playback.recent_song_totals()
+
+    conn
+    |> put_view(SpotMeWeb.JsonView)
+    |> render("index.json", songs: recent_songs, albums: recent_albums, totals: song_totals)
+  end
 end

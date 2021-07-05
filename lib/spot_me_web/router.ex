@@ -18,6 +18,8 @@ defmodule SpotMeWeb.Router do
 
     get "/", PageController, :index
 
+    get "/stats", PageController, :stats
+
     get "/spotify/auth", SpotifyAuthController, :authenticate_with_spotify
     get "/spotify/auth/callback", SpotifyAuthController, :spotify_oauth_callback
   end
