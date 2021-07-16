@@ -46,12 +46,10 @@ config :spot_me, SpotMe.Configs,
 
 config :sentry,
   dsn: sentry_dsn,
-  environment_name: :prod,
+  environment_name: Mix.exs(),
   enable_source_code_context: true,
   root_source_code_path: File.cwd!(),
-  tags: %{
-    env: "production"
-  },
+  tags: %{env: "prod"},
   included_environments: [:prod]
 
 # Import environment specific config. This must remain at the bottom
