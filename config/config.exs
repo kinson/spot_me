@@ -46,7 +46,7 @@ config :spot_me, SpotMe.Configs,
 
 config :sentry,
   dsn: sentry_dsn,
-  environment_name: Mix.exs(),
+  environment_name: Mix.env(),
   enable_source_code_context: true,
   root_source_code_path: File.cwd!(),
   tags: %{env: "prod"},
