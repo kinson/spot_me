@@ -97,7 +97,9 @@ defmodule SpotMe.Playback do
         spotify_user_id: user_id
       }
     end)
+    |> IO.inspect()
     |> filter_duplicate_plays()
+    |> IO.inspect()
     |> Enum.each(fn play_data ->
       if not is_play_duplicate?(most_recent_play, play_data) do
         create_play(play_data)
