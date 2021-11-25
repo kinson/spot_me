@@ -11,8 +11,6 @@ spotify_client_id = System.get_env("SPOTIFY_CLIENT_ID")
 
 spotify_client_secret = System.get_env("SPOTIFY_CLIENT_SECRET")
 
-sentry_dsn = System.get_env("SENTRY_DSN")
-
 config :spot_me,
   ecto_repos: [SpotMe.Repo]
 
@@ -45,7 +43,7 @@ config :spot_me, SpotMe.Configs,
   client_secret: spotify_client_secret
 
 config :sentry,
-  dsn: sentry_dsn,
+  dsn: System.get_env("SENTRY_DSN"),
   environment_name: Mix.env(),
   enable_source_code_context: true,
   root_source_code_path: File.cwd!(),
