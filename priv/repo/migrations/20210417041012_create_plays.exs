@@ -59,6 +59,5 @@ defmodule SpotMe.Repo.Migrations.CreatePlays do
 
       timestamps(type: :utc_datetime)
     end
-
   end
 end

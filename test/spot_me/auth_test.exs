@@ -6,8 +6,16 @@ defmodule SpotMe.AuthTest do
   describe "token_sets" do
     alias SpotMe.Auth.TokenSet
 
-    @valid_attrs %{access_token: "some access_token", expires_at: "some expires_at", refresh_token: "some refresh_token"}
-    @update_attrs %{access_token: "some updated access_token", expires_at: "some updated expires_at", refresh_token: "some updated refresh_token"}
+    @valid_attrs %{
+      access_token: "some access_token",
+      expires_at: "some expires_at",
+      refresh_token: "some refresh_token"
+    }
+    @update_attrs %{
+      access_token: "some updated access_token",
+      expires_at: "some updated expires_at",
+      refresh_token: "some updated refresh_token"
+    }
     @invalid_attrs %{access_token: nil, expires_at: nil, refresh_token: nil}
 
     def token_set_fixture(attrs \\ %{}) do
@@ -69,9 +77,33 @@ defmodule SpotMe.AuthTest do
   describe "spotify_users" do
     alias SpotMe.Auth.SpotifyUser
 
-    @valid_attrs %{display_name: "some display_name", email: "some email", ext_spotify_id: "some ext_spotify_id", images: "some images", product: "some product", type: "some type", uri: "some uri"}
-    @update_attrs %{display_name: "some updated display_name", email: "some updated email", ext_spotify_id: "some updated ext_spotify_id", images: "some updated images", product: "some updated product", type: "some updated type", uri: "some updated uri"}
-    @invalid_attrs %{display_name: nil, email: nil, ext_spotify_id: nil, images: nil, product: nil, type: nil, uri: nil}
+    @valid_attrs %{
+      display_name: "some display_name",
+      email: "some email",
+      ext_spotify_id: "some ext_spotify_id",
+      images: "some images",
+      product: "some product",
+      type: "some type",
+      uri: "some uri"
+    }
+    @update_attrs %{
+      display_name: "some updated display_name",
+      email: "some updated email",
+      ext_spotify_id: "some updated ext_spotify_id",
+      images: "some updated images",
+      product: "some updated product",
+      type: "some updated type",
+      uri: "some updated uri"
+    }
+    @invalid_attrs %{
+      display_name: nil,
+      email: nil,
+      ext_spotify_id: nil,
+      images: nil,
+      product: nil,
+      type: nil,
+      uri: nil
+    }
 
     def spotify_user_fixture(attrs \\ %{}) do
       {:ok, spotify_user} =
@@ -109,7 +141,10 @@ defmodule SpotMe.AuthTest do
 
     test "update_spotify_user/2 with valid data updates the spotify_user" do
       spotify_user = spotify_user_fixture()
-      assert {:ok, %SpotifyUser{} = spotify_user} = Auth.update_spotify_user(spotify_user, @update_attrs)
+
+      assert {:ok, %SpotifyUser{} = spotify_user} =
+               Auth.update_spotify_user(spotify_user, @update_attrs)
+
       assert spotify_user.display_name == "some updated display_name"
       assert spotify_user.email == "some updated email"
       assert spotify_user.ext_spotify_id == "some updated ext_spotify_id"

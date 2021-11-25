@@ -27,7 +27,7 @@ defmodule SpotMe.RefreshTokensServer do
 
     tokens = SpotMe.Auth.get_tokens_near_expiration(seven_minutes_from_now)
 
-    IO.puts "refreshing #{Enum.count(tokens)} tokens"
+    IO.puts("refreshing #{Enum.count(tokens)} tokens")
 
     Enum.each(tokens, fn token_set ->
       case SpotMe.Services.Auth.refresh_access_token(token_set) do

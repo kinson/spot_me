@@ -67,8 +67,18 @@ defmodule SpotMe.PlaybackTest do
   describe "songs" do
     alias SpotMe.Playback.Song
 
-    @valid_attrs %{album_id: "some album_id", duration_ms: "some duration_ms", ext_spotify_id: "some ext_spotify_id", name: "some name"}
-    @update_attrs %{album_id: "some updated album_id", duration_ms: "some updated duration_ms", ext_spotify_id: "some updated ext_spotify_id", name: "some updated name"}
+    @valid_attrs %{
+      album_id: "some album_id",
+      duration_ms: "some duration_ms",
+      ext_spotify_id: "some ext_spotify_id",
+      name: "some name"
+    }
+    @update_attrs %{
+      album_id: "some updated album_id",
+      duration_ms: "some updated duration_ms",
+      ext_spotify_id: "some updated ext_spotify_id",
+      name: "some updated name"
+    }
     @invalid_attrs %{album_id: nil, duration_ms: nil, ext_spotify_id: nil, name: nil}
 
     def song_fixture(attrs \\ %{}) do
@@ -193,9 +203,30 @@ defmodule SpotMe.PlaybackTest do
   describe "albums" do
     alias SpotMe.Playback.Album
 
-    @valid_attrs %{artist_id: "some artist_id", ext_spotify_id: "some ext_spotify_id", images: "some images", name: "some name", total_tracks: "some total_tracks", type: "some type"}
-    @update_attrs %{artist_id: "some updated artist_id", ext_spotify_id: "some updated ext_spotify_id", images: "some updated images", name: "some updated name", total_tracks: "some updated total_tracks", type: "some updated type"}
-    @invalid_attrs %{artist_id: nil, ext_spotify_id: nil, images: nil, name: nil, total_tracks: nil, type: nil}
+    @valid_attrs %{
+      artist_id: "some artist_id",
+      ext_spotify_id: "some ext_spotify_id",
+      images: "some images",
+      name: "some name",
+      total_tracks: "some total_tracks",
+      type: "some type"
+    }
+    @update_attrs %{
+      artist_id: "some updated artist_id",
+      ext_spotify_id: "some updated ext_spotify_id",
+      images: "some updated images",
+      name: "some updated name",
+      total_tracks: "some updated total_tracks",
+      type: "some updated type"
+    }
+    @invalid_attrs %{
+      artist_id: nil,
+      ext_spotify_id: nil,
+      images: nil,
+      name: nil,
+      total_tracks: nil,
+      type: nil
+    }
 
     def album_fixture(attrs \\ %{}) do
       {:ok, album} =
@@ -263,7 +294,11 @@ defmodule SpotMe.PlaybackTest do
     alias SpotMe.Playback.ArtistsSong
 
     @valid_attrs %{artist_id: "some artist_id", song_id: "some song_id", type: "some type"}
-    @update_attrs %{artist_id: "some updated artist_id", song_id: "some updated song_id", type: "some updated type"}
+    @update_attrs %{
+      artist_id: "some updated artist_id",
+      song_id: "some updated song_id",
+      type: "some updated type"
+    }
     @invalid_attrs %{artist_id: nil, song_id: nil, type: nil}
 
     def artists_song_fixture(attrs \\ %{}) do
@@ -298,7 +333,10 @@ defmodule SpotMe.PlaybackTest do
 
     test "update_artists_song/2 with valid data updates the artists_song" do
       artists_song = artists_song_fixture()
-      assert {:ok, %ArtistsSong{} = artists_song} = Playback.update_artists_song(artists_song, @update_attrs)
+
+      assert {:ok, %ArtistsSong{} = artists_song} =
+               Playback.update_artists_song(artists_song, @update_attrs)
+
       assert artists_song.artist_id == "some updated artist_id"
       assert artists_song.song_id == "some updated song_id"
       assert artists_song.type == "some updated type"
@@ -306,7 +344,10 @@ defmodule SpotMe.PlaybackTest do
 
     test "update_artists_song/2 with invalid data returns error changeset" do
       artists_song = artists_song_fixture()
-      assert {:error, %Ecto.Changeset{}} = Playback.update_artists_song(artists_song, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Playback.update_artists_song(artists_song, @invalid_attrs)
+
       assert artists_song == Playback.get_artists_song!(artists_song.id)
     end
 
@@ -326,7 +367,11 @@ defmodule SpotMe.PlaybackTest do
     alias SpotMe.Playback.AlbumsArtist
 
     @valid_attrs %{album_id: "some album_id", artist_id: "some artist_id", type: "some type"}
-    @update_attrs %{album_id: "some updated album_id", artist_id: "some updated artist_id", type: "some updated type"}
+    @update_attrs %{
+      album_id: "some updated album_id",
+      artist_id: "some updated artist_id",
+      type: "some updated type"
+    }
     @invalid_attrs %{album_id: nil, artist_id: nil, type: nil}
 
     def albums_artist_fixture(attrs \\ %{}) do
@@ -361,7 +406,10 @@ defmodule SpotMe.PlaybackTest do
 
     test "update_albums_artist/2 with valid data updates the albums_artist" do
       albums_artist = albums_artist_fixture()
-      assert {:ok, %AlbumsArtist{} = albums_artist} = Playback.update_albums_artist(albums_artist, @update_attrs)
+
+      assert {:ok, %AlbumsArtist{} = albums_artist} =
+               Playback.update_albums_artist(albums_artist, @update_attrs)
+
       assert albums_artist.album_id == "some updated album_id"
       assert albums_artist.artist_id == "some updated artist_id"
       assert albums_artist.type == "some updated type"
@@ -369,7 +417,10 @@ defmodule SpotMe.PlaybackTest do
 
     test "update_albums_artist/2 with invalid data returns error changeset" do
       albums_artist = albums_artist_fixture()
-      assert {:error, %Ecto.Changeset{}} = Playback.update_albums_artist(albums_artist, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Playback.update_albums_artist(albums_artist, @invalid_attrs)
+
       assert albums_artist == Playback.get_albums_artist!(albums_artist.id)
     end
 

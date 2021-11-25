@@ -19,8 +19,23 @@ defmodule SpotMe.Auth.TokenSet do
   @doc false
   def changeset(token_set, attrs) do
     token_set
-    |> cast(attrs, [:access_token, :refresh_token, :expires_at, :expires_in, :scope, :token_type, :spotify_user_id])
-    |> validate_required([:access_token, :refresh_token, :expires_at, :expires_in, :scope, :spotify_user_id])
+    |> cast(attrs, [
+      :access_token,
+      :refresh_token,
+      :expires_at,
+      :expires_in,
+      :scope,
+      :token_type,
+      :spotify_user_id
+    ])
+    |> validate_required([
+      :access_token,
+      :refresh_token,
+      :expires_at,
+      :expires_in,
+      :scope,
+      :spotify_user_id
+    ])
     |> unique_constraint(:spotify_user_id)
   end
 end

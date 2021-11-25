@@ -12,9 +12,7 @@ defmodule SpotMe.Services.Auth do
     base_url = Spotify.auth_base_url()
     authorize_endpoint = Spotify.authorize_endpoint()
 
-    "#{base_url}#{authorize_endpoint}?client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=#{
-      scope
-    }&response_type=code"
+    "#{base_url}#{authorize_endpoint}?client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=#{scope}&response_type=code"
   end
 
   def fetch_tokens_with_authorization_code(code) do
