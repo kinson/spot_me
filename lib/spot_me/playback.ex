@@ -47,17 +47,14 @@ defmodule SpotMe.Playback do
     |> DateTime.to_unix()
   end
 
-  def get_most_recent_play(spotify_user_id) do
-    case from(p in Play,
-           select: p,
-           where: p.spotify_user_id == ^spotify_user_id,
-           order_by: [desc: p.inserted_at],
-           limit: 1
-         )
-         |> Repo.all() do
-      [] -> nil
-      plays -> hd(plays)
-    end
+  def get_recent_plays(spotify_user_id) do
+    from(p in Play,
+      select: p,
+      where: p.spotify_user_id == ^spotify_user_id,
+      where: p.inserted_at > ^one_hour_ago(),
+      order_by: [desc: p.inserted_at]
+    )
+    |> Repo.all()
   end
 
   def filter_duplicate_plays(plays) do
@@ -82,7 +79,7 @@ defmodule SpotMe.Playback do
   end
 
   def record_recent_playback(plays, user_id) do
-    most_recent_play = get_most_recent_play(user_id)
+    recent_plays = get_recent_plays(user_id)
 
     Enum.map(plays, fn play ->
       artists = Map.get(play, :artists)
@@ -97,11 +94,9 @@ defmodule SpotMe.Playback do
         spotify_user_id: user_id
       }
     end)
-    |> IO.inspect()
     |> filter_duplicate_plays()
-    |> IO.inspect()
     |> Enum.each(fn play_data ->
-      if not is_play_duplicate?(most_recent_play, play_data) do
+      if not is_play_duplicate?(recent_plays, play_data) do
         create_play(play_data)
         |> handle_create_play_errors()
       end
@@ -110,14 +105,16 @@ defmodule SpotMe.Playback do
 
   defp is_play_duplicate?(nil, _), do: false
 
-  defp is_play_duplicate?(%Play{played_at: played_at, song_id: song_id}, %{
+  defp is_play_duplicate?(existing_plays, %{
          played_at: new_track_played_at,
          song_id: new_track_song_id
        }) do
-    case song_id == new_track_song_id do
-      false -> false
-      true -> Play.is_duplicate_play?(new_track_played_at, played_at)
-    end
+    Enum.any?(existing_plays, fn %Play{played_at: played_at, song_id: song_id} ->
+      case song_id == new_track_song_id do
+        false -> false
+        true -> Play.is_duplicate_play?(new_track_played_at, played_at)
+      end
+    end)
   end
 
   def handle_create_play_errors(create_result) do
@@ -327,5 +324,10 @@ defmodule SpotMe.Playback do
   defp two_weeks_ago do
     two_weeks = 14 * 24 * 60 * 60
     DateTime.add(DateTime.utc_now(), two_weeks * -1, :second)
+  end
+
+  defp one_hour_ago do
+    one_hour = 60 * 60
+    DateTime.add(DateTime.utc_now(), one_hour * -1, :second)
   end
 end

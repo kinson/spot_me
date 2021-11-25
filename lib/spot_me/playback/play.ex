@@ -24,9 +24,9 @@ defmodule SpotMe.Playback.Play do
 
   def is_duplicate_play?(%DateTime{} = played_at_one, %DateTime{} = played_at_two) do
     diff = DateTime.diff(played_at_one, played_at_two, :millisecond) |> abs()
-    one_hour = :timer.hours(1)
+    two_hours = :timer.hours(2)
 
-    case diff < one_hour do
+    case diff < two_hours do
       true ->
         IO.puts("Deduping play")
         true

@@ -26,6 +26,10 @@ defmodule SpotMe.RecentlyPlayedServer do
     IO.puts("fetching recently played tracks after #{human_readable_timestamp(after_ms)}")
     users = SpotMe.Auth.get_users_and_live_tokens()
 
+    # subtract 20 minutes to catch any unprocessed recently
+    # played tracks
+    after_ms = subtract_twenty_minutes(after_ms)
+
     Enum.each(users, fn {user_id, access_token} ->
       fetch_after(access_token, user_id, after_ms)
     end)
@@ -68,5 +72,10 @@ defmodule SpotMe.RecentlyPlayedServer do
   defp human_readable_timestamp(ms) do
     {:ok, dt} = DateTime.from_unix(ms, :millisecond)
     DateTime.add(dt, -1 * 60 * 60 * 6, :second)
+  end
+
+  defp subtract_twenty_minutes(ms) do
+    one_hour = 20 * 60 * 1000
+    ms - one_hour
   end
 end
