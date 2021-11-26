@@ -123,6 +123,7 @@ defmodule SpotMe.Playback do
         nil
 
       {:error, err} ->
+        Sentry.capture_message("play_save_failed", %{err: err})
         IO.puts("failed to create new play")
         IO.inspect(err)
 
