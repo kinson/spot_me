@@ -43,6 +43,7 @@ defmodule SpotMe.MixProject do
       {:phoenix_html, "~> 3.0.4"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.5"},
+      {:ecto_psql_extras, "~> 0.7"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 0.5"},
       {:gettext, "~> 0.11"},

@@ -22,6 +22,8 @@ config :spot_me, SpotMeWeb.Endpoint,
   pubsub_server: SpotMe.PubSub,
   live_view: [signing_salt: "9flJjHcJ"]
 
+config :spot_me, :dash_pass, System.fetch_env!("DASH_PASS")
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

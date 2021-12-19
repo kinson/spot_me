@@ -1,6 +1,8 @@
 defmodule SpotMeWeb.Router do
   use SpotMeWeb, :router
 
+  import Plug.BasicAuth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -36,12 +38,18 @@ defmodule SpotMeWeb.Router do
   # If your application does not have an admins-only section yet,
   # you can use Plug.BasicAuth to set up some basic authentication
   # as long as you are also using SSL (which you should anyway).
-  if Mix.env() in [:dev, :test] do
+  pipeline :dash do
+    plug :basic_auth,
+      username: "sam",
+      password: Application.fetch_env!(:spot_me, :dash_pass)
+  end
+
+  if Mix.env() in [:dev, :prod] do
     import Phoenix.LiveDashboard.Router
 
-    scope "/" do
-      pipe_through :browser
-      live_dashboard "/dashboard", metrics: SpotMeWeb.Telemetry
+    scope "/admin" do
+      pipe_through [:browser, :dash]
+      live_dashboard "/dashboard", metrics: SpotMeWeb.Telemetry, ecto_repos: [SpotMe.Repo]
     end
   end
 end
