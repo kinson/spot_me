@@ -1,14 +1,20 @@
 source .env
 export MIX_ENV=prod
+export PORT=5000
 
-kill -9 $(lsof -t -i:5000)
+echo "Stopping Application"
+_build/prod/rel/spot_me/bin/spot_me stop
 
+echo "Fetching Latest Deps"
 mix deps.get --only prod
+
+echo "Building Application"
 npm run deploy --prefix ./assets/
 mix phx.digest
+mix release --overwrite
 
-mix compile
-
+echo "Migrating"
 mix ecto.migrate
 
-PORT=5000 elixir --erl "-detached" -S mix phx.server
+echo "Starting Application"
+build/prod/rel/spot_me/bin/spot_me daemon
