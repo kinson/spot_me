@@ -17,14 +17,11 @@ defmodule SpotMeWeb.PageController do
   end
 
   def get_top_albums() do
-    beginning_of_month = Date.utc_today() |> Date.beginning_of_month()
-
     {albums, _count} =
-      Enum.map_reduce(1..5, Date.utc_today(), fn _x, acc ->
+      Enum.map_reduce(1..12, Date.utc_today(), fn _x, acc ->
         beginning_of_month = Date.beginning_of_month(acc)
         end_of_month = Date.end_of_month(acc)
 
-        midnight = ~T[00:00:00]
         b = DateTime.new!(beginning_of_month, ~T[00:00:00])
         e = DateTime.new!(end_of_month, ~T[23:59:59])
 

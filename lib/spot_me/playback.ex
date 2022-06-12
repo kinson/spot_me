@@ -331,7 +331,7 @@ defmodule SpotMe.Playback do
       group_by: a.id,
       select: {count(a.id), a, sum(s.duration_ms)},
       order_by: [desc: sum(s.duration_ms)],
-      limit: 6
+      limit: 10
     )
     |> Repo.all()
   end
