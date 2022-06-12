@@ -11,6 +11,7 @@ use Mix.Config
 # before starting your production server.
 config :spot_me, SpotMeWeb.Endpoint,
   url: [host: "tunes.samwhunter.com", port: 80],
+  server: true,
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production

@@ -17,4 +17,4 @@ echo "Migrating"
 mix ecto.migrate
 
 echo "Starting Application"
-build/prod/rel/spot_me/bin/spot_me daemon
+_build/prod/rel/spot_me/bin/spot_me daemon
