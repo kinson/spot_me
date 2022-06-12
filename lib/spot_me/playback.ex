@@ -322,6 +322,20 @@ defmodule SpotMe.Playback do
     |> Repo.all()
   end
 
+  def top_albums_between_dates(start, finish) do
+    from(p in Play,
+      join: s in assoc(p, :song),
+      join: a in assoc(s, :album),
+      where: p.inserted_at > ^start,
+      where: p.inserted_at < ^finish,
+      group_by: a.id,
+      select: {count(a.id), a, sum(s.duration_ms)},
+      order_by: [desc: sum(s.duration_ms)],
+      limit: 6
+    )
+    |> Repo.all()
+  end
+
   defp two_weeks_ago do
     two_weeks = 14 * 24 * 60 * 60
     DateTime.add(DateTime.utc_now(), two_weeks * -1, :second)

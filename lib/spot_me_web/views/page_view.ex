@@ -139,4 +139,27 @@ defmodule SpotMeWeb.PageView do
   def album_link(%{album_id: id}) do
     "https://open.spotify.com/album/" <> id
   end
+
+  def album_link(song) do
+    id = song.album.ext_spotify_id
+
+    "https://open.spotify.com/album/" <> id
+  end
+
+  def month_name(month) do
+    case month do
+      1 -> "January"
+      2 -> "February"
+      3 -> "March"
+      4 -> "April"
+      5 -> "May"
+      6 -> "June"
+      7 -> "July"
+      8 -> "August"
+      9 -> "September"
+      10 -> "October"
+      11 -> "November"
+      12 -> "December"
+    end
+  end
 end

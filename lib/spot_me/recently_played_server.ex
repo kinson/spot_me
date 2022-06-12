@@ -9,7 +9,7 @@ defmodule SpotMe.RecentlyPlayedServer do
   def init(state) do
     IO.puts("STARTING RECENTLY PLAYED POLLING INTERVAL")
     new_state = fetch_recent_plays(state)
-    
+
     Sentry.capture_message("starting RecentlyPlayedServer")
     :timer.send_interval(750_000, :work)
 

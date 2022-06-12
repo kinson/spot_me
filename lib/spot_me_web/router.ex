@@ -19,6 +19,7 @@ defmodule SpotMeWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/top", PageController, :top
 
     get "/stats", PageController, :stats
 
