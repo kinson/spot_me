@@ -4,8 +4,8 @@ defmodule SpotMe.MixProject do
   def project do
     [
       app: :spot_me,
-      version: "1.2.0",
-      elixir: "~> 1.12",
+      version: "1.3.0",
+      elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -40,9 +40,10 @@ defmodule SpotMe.MixProject do
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.7"},
       {:postgrex, "~> 0.15"},
-      {:phoenix_html, "~> 3.0.4"},
+      {:phoenix_html, "~> 3.1"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_dashboard, "~> 0.5"},
+      {:phoenix_live_dashboard, "~> 0.6"},
+      {:phoenix_live_view, "~> 0.17.10"},
       {:ecto_psql_extras, "~> 0.7"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 0.5"},

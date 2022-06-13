@@ -12,13 +12,13 @@ defmodule SpotMeWeb.PageController do
   end
 
   def top(conn, _params) do
-    albums = get_top_albums()
+    albums = CacheServer.fetch_object("top_albums", &get_top_albums/0, 60 * 20)
     render(conn, "top.html", top_albums: albums)
   end
 
   def get_top_albums() do
     {albums, _count} =
-      Enum.map_reduce(1..12, Date.utc_today(), fn _x, acc ->
+      Enum.map_reduce(1..14, Date.utc_today(), fn _x, acc ->
         beginning_of_month = Date.beginning_of_month(acc)
         end_of_month = Date.end_of_month(acc)
 

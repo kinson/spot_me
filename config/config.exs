@@ -5,7 +5,7 @@
 # is restricted to this project.
 
 # General application configuration
-use Mix.Config
+import Mix.Config
 
 spotify_client_id = System.get_env("SPOTIFY_CLIENT_ID")
 
