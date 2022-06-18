@@ -163,6 +163,31 @@ div.page {
     }
   }
 
+  div.new-playback-stats {
+    display: flex;
+    flex-direction: column;
+    grid-row-gap: 1rem;
+    margin-bottom: 3rem;
+
+    &>div {
+      display: flex;
+      align-items: baseline;
+      flex-direction: row;
+      grid-column-gap: 2rem;
+
+      &>p {
+        margin: 0;
+        font-family: "Libre Baskerville", serif;
+      }
+
+      &>p.stat {
+        font-family: "Playfair Display", serif;
+        font-size: 1.4em;
+        color: $gold;
+      }
+    }
+  }
+
   div.top-albums-for-month {
     display: grid;
     grid-template-columns: 1fr 1fr;

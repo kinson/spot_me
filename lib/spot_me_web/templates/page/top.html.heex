@@ -7,10 +7,20 @@
   <p class="big-ol-title">What I've Been Listening to Recently</p>
   <p class="lil-bro">[on Spotify]</p>
   <div class="separator"></div>
-  <%= for {month, albums} <- @top_albums do %>
-    <h2 class="top-album-month"><%= month_name(month) %></h2>
+  <%= for stats <- @monthly_stats do %>
+    <h2 class="top-album-month"><%= month_name(stats.month) %></h2>
+    <div class="new-playback-stats">
+      <div>
+        <p>Percent of Songs Not Played Last Month</p>
+        <p class="stat"><%= stats.percent_not_played_last_month %>%</p>
+      </div>
+      <div>
+        <p>Percent of Songs Not Played Before</p>
+        <p class="stat"><%= stats.percent_not_played_before %>%</p>
+      </div>
+    </div>
     <div class="top-albums-for-month">
-      <%= for {_count, album, duration_ms} <- albums do %>
+      <%= for {_count, album, duration_ms} <- stats.albums do %>
         <div class="songcontainer">
           <svg
             width="29px"

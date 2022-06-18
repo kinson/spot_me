@@ -12,11 +12,11 @@ defmodule SpotMeWeb.PageController do
   end
 
   def top(conn, _params) do
-    albums = CacheServer.fetch_object("top_albums", &get_top_albums/0, 60 * 20)
-    render(conn, "top.html", top_albums: albums)
+    monthly_stats = CacheServer.fetch_object("monthly_stats", &get_monthly_stats/0, 60 * 20)
+    render(conn, "top.html", monthly_stats: monthly_stats)
   end
 
-  def get_top_albums() do
+  def get_monthly_stats() do
     {albums, _count} =
       Enum.map_reduce(1..14, Date.utc_today(), fn _x, acc ->
         beginning_of_month = Date.beginning_of_month(acc)
@@ -25,8 +25,31 @@ defmodule SpotMeWeb.PageController do
         b = DateTime.new!(beginning_of_month, ~T[00:00:00])
         e = DateTime.new!(end_of_month, ~T[23:59:59])
 
-        {{beginning_of_month.month, Playback.top_albums_between_dates(b, e)},
-         Date.add(beginning_of_month, -25)}
+        top_albums = Playback.top_albums_between_dates(b, e)
+        top_artists = Playback.top_artists_between_dates(b, e)
+
+        {count_not_played_last_month, count_played_last_month} =
+          Playback.get_fresh_plays_for_month(b, e) |> IO.inspect()
+
+        {count_new_songs, count_old_songs} =
+          Playback.get_new_plays_for_month(b, e) |> IO.inspect()
+
+        percent_not_played_last_month =
+          round(
+            count_not_played_last_month / (count_not_played_last_month + count_played_last_month) *
+              100
+          )
+
+        percent_not_played_before =
+          round(count_new_songs / (count_new_songs + count_old_songs) * 100)
+
+        {%{
+           month: beginning_of_month.month,
+           albums: top_albums,
+           artists: top_artists,
+           percent_not_played_last_month: percent_not_played_last_month,
+           percent_not_played_before: percent_not_played_before
+         }, Date.add(beginning_of_month, -25)}
       end)
 
     albums

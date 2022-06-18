@@ -336,6 +336,81 @@ defmodule SpotMe.Playback do
     |> Repo.all()
   end
 
+  def top_artists_between_dates(start, finish) do
+    from(p in Play,
+      join: s in assoc(p, :song),
+      join: a in assoc(s, :artists),
+      where: p.inserted_at > ^start,
+      where: p.inserted_at < ^finish,
+      group_by: a.id,
+      select: {count(a.id), a, sum(s.duration_ms)},
+      order_by: [desc: sum(s.duration_ms)],
+      limit: 10
+    )
+    |> Repo.all()
+  end
+
+  def get_fresh_plays_for_month(start, finish) do
+    beginning_of_previous_month =
+      Date.add(start, -25) |> Date.beginning_of_month() |> DateTime.new!(~T[00:00:00])
+
+    previous_month_subquery =
+      from(p in Play,
+        join: s in assoc(p, :song),
+        where: p.inserted_at > ^beginning_of_previous_month,
+        where: p.inserted_at < ^start,
+        distinct: true,
+        select: s.id
+      )
+
+    fresh =
+      from(p in Play,
+        join: s in assoc(p, :song),
+        where: p.inserted_at > ^start,
+        where: p.inserted_at < ^finish,
+        where: s.id not in subquery(previous_month_subquery),
+        select: count(p.id)
+      )
+      |> Repo.one()
+
+    stale =
+      from(p in Play,
+        join: s in assoc(p, :song),
+        where: p.inserted_at > ^start,
+        where: p.inserted_at < ^finish,
+        where: s.id in subquery(previous_month_subquery),
+        select: count(p.id)
+      )
+      |> Repo.one()
+
+    {fresh, stale}
+  end
+
+  def get_new_plays_for_month(start, finish) do
+    new =
+      from(p in Play,
+        join: s in assoc(p, :song),
+        where: p.inserted_at > ^start,
+        where: p.inserted_at < ^finish,
+        where: s.inserted_at > ^start,
+        where: s.inserted_at < ^finish,
+        select: count(p.id)
+      )
+      |> Repo.one()
+
+    old =
+      from(p in Play,
+        join: s in assoc(p, :song),
+        where: p.inserted_at > ^start,
+        where: p.inserted_at < ^finish,
+        where: s.inserted_at < ^start,
+        select: count(p.id)
+      )
+      |> Repo.one()
+
+    {new, old}
+  end
+
   defp two_weeks_ago do
     two_weeks = 14 * 24 * 60 * 60
     DateTime.add(DateTime.utc_now(), two_weeks * -1, :second)
