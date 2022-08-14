@@ -1,8 +1,4 @@
-# In this file, we load production configuration and secrets
-# from environment variables. You can also hardcode secrets,
-# although such is generally not recommended and you have to
-# remember to add this file to your .gitignore.
-import Mix.Config
+import Config
 
 database_url =
   System.get_env("DATABASE_URL") ||
@@ -12,8 +8,9 @@ database_url =
     """
 
 config :spot_me, SpotMe.Repo,
-  ssl: true,
+  ssl: false,
   url: database_url,
+  socket_options: [:inet6],
   pool_size: 8,
   queue_target: 500,
   queue_interval: 5000
@@ -32,12 +29,9 @@ config :spot_me, SpotMeWeb.Endpoint,
   ],
   secret_key_base: secret_key_base
 
-# ## Using releases (Elixir v1.9+)
-#
-# If you are doing OTP releases, you need to instruct Phoenix
-# to start each relevant endpoint:
-#
-#     config :spot_me, SpotMeWeb.Endpoint, server: true
-#
-# Then you can assemble a release by calling `mix release`.
-# See `mix help release` for more information.
+config :spot_me, SpotMe.Configs,
+  client_id: System.get_env("SPOTIFY_CLIENT_ID"),
+  client_secret: System.get_env("SPOTIFY_CLIENT_SECRET")
+
+config :sentry,
+  dsn: System.get_env("SENTRY_DSN")

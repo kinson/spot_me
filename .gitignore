@@ -43,3 +43,5 @@ _build/
 
 .elixir_ls/
 .DS_Store
+
+/rel/

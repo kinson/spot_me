@@ -7,10 +7,6 @@
 # General application configuration
 import Mix.Config
 
-spotify_client_id = System.get_env("SPOTIFY_CLIENT_ID")
-
-spotify_client_secret = System.get_env("SPOTIFY_CLIENT_SECRET")
-
 config :spot_me,
   ecto_repos: [SpotMe.Repo]
 
@@ -21,8 +17,6 @@ config :spot_me, SpotMeWeb.Endpoint,
   render_errors: [view: SpotMeWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: SpotMe.PubSub,
   live_view: [signing_salt: "9flJjHcJ"]
-
-config :spot_me, :dash_pass, System.fetch_env!("DASH_PASS")
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -40,12 +34,9 @@ config :spot_me, SpotMe.Configs,
   profile_endpoint: "/me",
   recently_played_endpoint: "/me/player/recently-played",
   currently_playing_endpoint: "/me/player",
-  scopes: "user-read-recently-played user-read-email user-read-playback-state",
-  client_id: spotify_client_id,
-  client_secret: spotify_client_secret
+  scopes: "user-read-recently-played user-read-email user-read-playback-state"
 
 config :sentry,
-  dsn: System.get_env("SENTRY_DSN"),
   environment_name: Mix.env(),
   enable_source_code_context: true,
   root_source_code_path: File.cwd!(),
