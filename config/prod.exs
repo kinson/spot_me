@@ -52,4 +52,3 @@ config :spot_me, SpotMe.Configs, redirect_uri: "http://tunes.samwhunter.com/spot
 #       force_ssl: [hsts: true]
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
-
