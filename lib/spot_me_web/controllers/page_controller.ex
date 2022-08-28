@@ -12,7 +12,7 @@ defmodule SpotMeWeb.PageController do
   end
 
   def top(conn, _params) do
-    monthly_stats = CacheServer.fetch_object("monthly_stats", &get_monthly_stats/0, 60 * 20)
+    monthly_stats = get_monthly_stats()
     render(conn, "top.html", monthly_stats: monthly_stats)
   end
 
@@ -25,31 +25,20 @@ defmodule SpotMeWeb.PageController do
         b = DateTime.new!(beginning_of_month, ~T[00:00:00])
         e = DateTime.new!(end_of_month, ~T[23:59:59])
 
-        top_albums = Playback.top_albums_between_dates(b, e)
-        top_artists = Playback.top_artists_between_dates(b, e)
+        cache_duration =
+          if Date.diff(Date.utc_today(), beginning_of_month) < 30,
+            do: 60 * 5,
+            else: 60 * 60 * 24 * 30
 
-        {count_not_played_last_month, count_played_last_month} =
-          Playback.get_fresh_plays_for_month(b, e) |> IO.inspect()
-
-        {count_new_songs, count_old_songs} =
-          Playback.get_new_plays_for_month(b, e) |> IO.inspect()
-
-        percent_not_played_last_month =
-          round(
-            count_not_played_last_month / (count_not_played_last_month + count_played_last_month) *
-              100
+        month_stats =
+          CacheServer.fetch_object(
+            "month-#{beginning_of_month}",
+            fn -> Playback.get_monthly_stats(b, e) end,
+            cache_duration
           )
+          |> Map.merge(%{month: beginning_of_month.month})
 
-        percent_not_played_before =
-          round(count_new_songs / (count_new_songs + count_old_songs) * 100)
-
-        {%{
-           month: beginning_of_month.month,
-           albums: top_albums,
-           artists: top_artists,
-           percent_not_played_last_month: percent_not_played_last_month,
-           percent_not_played_before: percent_not_played_before
-         }, Date.add(beginning_of_month, -25)}
+        {month_stats, Date.add(beginning_of_month, -25)}
       end)
 
     albums

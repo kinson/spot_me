@@ -11,12 +11,16 @@
     <h2 class="top-album-month"><%= month_name(stats.month) %></h2>
     <div class="new-playback-stats">
       <div>
-        <p>Percent of Songs Not Played Last Month</p>
-        <p class="stat"><%= stats.percent_not_played_last_month %>%</p>
+        <p class="stat"><%= stats.minutes_played %></p>
+        <p>Minutes Played</p>
       </div>
       <div>
-        <p>Percent of Songs Not Played Before</p>
+        <p class="stat"><%= stats.percent_not_played_last_month %>%</p>
+        <p>of Songs Not Played Last Month</p>
+      </div>
+      <div>
         <p class="stat"><%= stats.percent_not_played_before %>%</p>
+        <p>of Songs Not Played Before</p>
       </div>
     </div>
     <div class="top-albums-for-month">

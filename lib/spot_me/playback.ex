@@ -322,6 +322,47 @@ defmodule SpotMe.Playback do
     |> Repo.all()
   end
 
+  def get_monthly_stats(b, e) do
+    top_albums = top_albums_between_dates(b, e)
+    top_artists = top_artists_between_dates(b, e)
+
+    {count_not_played_last_month, count_played_last_month} = get_fresh_plays_for_month(b, e)
+
+    {count_new_songs, count_old_songs} = get_new_plays_for_month(b, e)
+
+    ms_played = get_minutes_played_for_month(b, e) || 0
+    minutes_played = round(ms_played / (60 * 1000))
+
+    total_played_last_month = count_not_played_last_month + count_played_last_month
+
+    total_song_count = count_new_songs + count_old_songs
+
+    percent_not_played_last_month =
+      if total_played_last_month > 0 do
+        round(
+          count_not_played_last_month / total_played_last_month *
+            100
+        )
+      else
+        0
+      end
+
+    percent_not_played_before =
+      if total_song_count > 0 do
+        round(count_new_songs / total_song_count * 100)
+      else
+        0
+      end
+
+    %{
+      albums: top_albums,
+      minutes_played: minutes_played,
+      artists: top_artists,
+      percent_not_played_last_month: percent_not_played_last_month,
+      percent_not_played_before: percent_not_played_before
+    }
+  end
+
   def top_albums_between_dates(start, finish) do
     from(p in Play,
       join: s in assoc(p, :song),
@@ -409,6 +450,16 @@ defmodule SpotMe.Playback do
       |> Repo.one()
 
     {new, old}
+  end
+
+  def get_minutes_played_for_month(start, finish) do
+    from(p in Play,
+      join: s in assoc(p, :song),
+      where: p.inserted_at > ^start,
+      where: p.inserted_at < ^finish,
+      select: sum(s.duration_ms)
+    )
+    |> Repo.one()
   end
 
   defp two_weeks_ago do
