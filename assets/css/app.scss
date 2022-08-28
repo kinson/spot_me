@@ -192,7 +192,8 @@ div.page {
 
   div.top-albums-for-month {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(36rem, auto));
+    justify-content: space-evenly;
     margin-bottom: 4rem;
     row-gap: 3rem;
 
