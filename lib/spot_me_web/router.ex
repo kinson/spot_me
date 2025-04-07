@@ -20,6 +20,7 @@ defmodule SpotMeWeb.Router do
 
     get "/", PageController, :index
     get "/top", PageController, :top
+    get "/random", PageController, :random_album
 
     get "/stats", PageController, :stats
 

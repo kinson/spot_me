@@ -16,6 +16,11 @@ defmodule SpotMeWeb.PageController do
     render(conn, "top.html", monthly_stats: monthly_stats)
   end
 
+  def random_album(conn, _params) do
+    random_albums = Playback.get_random_albums()
+    render(conn, "random_album.html", random_albums: random_albums)
+  end
+
   def get_monthly_stats() do
     {albums, _count} =
       Enum.map_reduce(1..14, Date.utc_today(), fn _x, acc ->

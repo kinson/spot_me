@@ -471,4 +471,21 @@ defmodule SpotMe.Playback do
     one_hour = 60 * 60
     DateTime.add(DateTime.utc_now(), one_hour * -1, :second)
   end
+
+  def get_random_albums do
+    from(p in Play,
+      join: s in assoc(p, :song),
+      join: a in assoc(s, :album),
+      group_by: [a.name, a.id],
+      select: %{
+        album: a,
+        play_count: count(p.id),
+        track_count: count(s.id, distinct: true)
+      },
+      having: count(p.id) > 60 and count(s.id, distinct: true) > 4,
+      order_by: [desc: count(p.id)]
+    )
+    |> Repo.all()
+    |> Enum.take_random(6)
+  end
 end

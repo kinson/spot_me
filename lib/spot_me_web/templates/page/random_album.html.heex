@@ -1,0 +1,70 @@
+<div class="page">
+  <div class="tippy-top">
+    <div class="slash"></div>
+    <p class="tunes">tunes</p>
+    <div class="slash"></div>
+  </div>
+  <p class="big-ol-title">Random Albums From My Most Played</p>
+  <p class="lil-bro">[on Spotify]</p>
+  <div class="separator"></div>
+  
+  <div class="top-albums-for-month">
+    <%= for album_data <- @random_albums do %>
+      <div class="songcontainer">
+        <svg
+          width="29px"
+          height="56px"
+          viewBox="0 0 29 56"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g
+              id="Artboard"
+              transform="translate(-172.000000, -111.000000)"
+              stroke="#979797"
+              stroke-width="2"
+            >
+              <g id="Group-4" transform="translate(173.618214, 111.050000)">
+                <polyline id="Path" points="0 0 0 44 15 44"></polyline>
+                <polyline
+                  id="Path-2"
+                  points="16.6972162 33.76 25.3817865 43.9897583 16.6972162 54.6480876"
+                >
+                </polyline>
+              </g>
+            </g>
+          </g>
+        </svg>
+        <img class="album-cover" src={album_image(%{album: album_data.album})} />
+        <div class="info">
+          <div class="arow">
+            <span><%= album_icon() %></span>
+            <a class="first-row" href={album_link(%{album: album_data.album})} target="_blank">
+              <%= album_data.album.name %>
+            </a>
+          </div>
+          <div class="arow">
+            <span><%= disc_icon() %></span>
+            <a class="second-row" href="#">
+              <%= album_data.play_count %> Plays, <%= album_data.track_count %> Tracks
+            </a>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  
+  <footer id="tunes-footer">
+    <a href="https://open.spotify.com/user/sam.hunter">Find me on Spotify</a>
+    <div class="tippy-top">
+      <div class="slash"></div>
+      <p class="tunes">
+        click on any of the songs, artists, or albums to listen.<br />thanks for stopping by,<br />
+        ✌️ Sam
+      </p>
+      <div class="slash"></div>
+    </div>
+  </footer>
+</div> 
