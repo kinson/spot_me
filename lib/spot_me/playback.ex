@@ -486,6 +486,7 @@ defmodule SpotMe.Playback do
       order_by: [desc: count(p.id)]
     )
     |> Repo.all()
-    |> Enum.take_random(6)
+    |> Enum.shuffle()
+    |> Enum.take(6)
   end
 end
