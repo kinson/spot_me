@@ -482,7 +482,7 @@ defmodule SpotMe.Playback do
         play_count: count(p.id),
         track_count: count(s.id, distinct: true)
       },
-      having: count(p.id) > 60 and count(s.id, distinct: true) > 4,
+      having: fragment("COUNT(?) > 60", p.id) and fragment("COUNT(DISTINCT ?) > 4", s.id),
       order_by: [desc: count(p.id)]
     )
     |> Repo.all()
