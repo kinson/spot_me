@@ -479,14 +479,13 @@ defmodule SpotMe.Playback do
       group_by: [a.name, a.id],
       select: %{
         album: a,
-        play_count: count(p.id),
-        track_count: count(s.id, distinct: true)
+        play_count: count(p.id)
       },
       having: fragment("COUNT(?) > 60", p.id) and fragment("COUNT(DISTINCT ?) > 4", s.id),
       order_by: [desc: count(p.id)]
     )
     |> Repo.all()
     |> Enum.shuffle()
-    |> Enum.take(6)
+    |> Enum.take(8)
   end
 end

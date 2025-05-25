@@ -7,7 +7,7 @@
   <p class="big-ol-title">Random Albums From My Most Played</p>
   <p class="lil-bro">[on Spotify]</p>
   <div class="separator"></div>
-  
+
   <div class="top-albums-for-month">
     <%= for album_data <- @random_albums do %>
       <div class="songcontainer">
@@ -48,14 +48,14 @@
           <div class="arow">
             <span><%= disc_icon() %></span>
             <a class="second-row" href="#">
-              <%= album_data.play_count %> Plays, <%= album_data.track_count %> Tracks
+              <%= album_data.play_count %> Plays
             </a>
           </div>
         </div>
       </div>
     <% end %>
   </div>
-  
+
   <footer id="tunes-footer">
     <a href="https://open.spotify.com/user/sam.hunter">Find me on Spotify</a>
     <div class="tippy-top">
@@ -67,4 +67,4 @@
       <div class="slash"></div>
     </div>
   </footer>
-</div> 
+</div>
