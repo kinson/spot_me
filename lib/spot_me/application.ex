@@ -13,13 +13,12 @@ defmodule SpotMe.Application do
       SpotMeWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: SpotMe.PubSub},
-      # Start the Endpoint (http/https)
-      SpotMeWeb.Endpoint,
       # Start a worker by calling: SpotMe.Worker.start_link(arg)
       # {SpotMe.Worker, arg}
       SpotMe.RefreshTokensServer,
       SpotMe.RecentlyPlayedServer,
-      Fiat.CacheServer
+      Fiat.CacheServer,
+      SpotMeWeb.Endpoint
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
